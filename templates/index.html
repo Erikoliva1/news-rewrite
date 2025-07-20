@@ -2,6 +2,7 @@
 <html lang="ne">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Rim Online</title>
   <link rel="icon" href="https://i.ibb.co/BKqH689b/logo.png" type="image/png">
   <style>
@@ -34,10 +35,9 @@
       letter-spacing: 1px;
     }
 
-    /* Added for datetime position */
     .header-datetime {
       text-align: center;
-      margin-top: -40px; /* Pulls up closer to "THE RIM ONLINE" */
+      margin-top: -40px;
       margin-bottom: 20px;
       font-size: 15px;
       color: #444;
@@ -127,7 +127,51 @@
       text-decoration: underline;
     }
 
-    /* Removed .datetime from footer */
+    /* Mobile responsive styles */
+    @media screen and (max-width: 600px) {
+      body {
+        padding: 10px;
+        font-size: 15px;
+      }
+
+      .rim-online-text {
+        font-size: 1rem;
+        margin-bottom: 60px;
+      }
+
+      .header-datetime {
+        font-size: 13px;
+        margin-bottom: 15px;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .button-group button {
+        width: 100%;
+        font-size: 15px;
+      }
+
+      .output {
+        font-size: 14px;
+        padding: 15px;
+      }
+
+      footer {
+        font-size: 12px;
+      }
+
+      .creator-info {
+        font-size: 11px;
+      }
+
+      textarea {
+        font-size: 15px;
+        padding: 10px;
+        min-height: 150px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -137,7 +181,6 @@
       <img src="https://i.ibb.co/BKqH689b/logo.png" alt="The Rim Online Logo">
     </a>
     <div class="rim-online-text">THE RIM ONLINE</div>
-    <!-- Moved datetime here -->
     <div class="header-datetime" id="nepaliDateTime">लोड हुँदैछ...</div>
   </div>
 
@@ -153,7 +196,8 @@
 
   <footer>
     <div class="creator-info">
-      Created by <a href="https://www.facebook.com/prabhatyadav99" target="_blank">Prabhat Yadav</a> <br><a href="mailto:prabhatyadav2003@gmail.com">prabhatyadav2003@gmail.com</a> | 
+      Created by <a href="https://www.facebook.com/prabhatyadav99" target="_blank">Prabhat Yadav</a> <br>
+      <a href="mailto:prabhatyadav2003@gmail.com">prabhatyadav2003@gmail.com</a> |
       <a href="tel:+977 9705858058">+977 9705858058</a>
     </div>
     &copy; The Rim Online — All Rights Reserved
@@ -252,5 +296,82 @@
     loadNepaliDateTime();
     setInterval(loadNepaliDateTime, 60000);
   </script>
+
+<script>
+const bsMonthNames = ['बैशाख','जेठ','असार','साउन','भदौ','असोज','कार्तिक','मंसिर','पुष','माघ','फाल्गुन','चैत्र'];
+const bsDayNames = ['आइतबार','सोमबार','मंगलबार','बुधबार','बिहिबार','शुक्रबार','शनिबार'];
+
+function toNepaliDigits(str) {
+  const nd = ['०','१','२','३','४','५','६','७','८','९'];
+  return str.replace(/\d/g, d => nd[d]);
+}
+
+// Basic Nepali date converter table (from 2000 to 2090 BS)
+const bsData = [
+  [2000, 30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31],
+  [2082, 31, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31],  // Sample for 2082 BS
+  [2090, 31, 31, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31]
+];
+
+function adToBs(adDate) {
+  // This is a simplified mock; for full logic we use a predefined date
+  const known = new Date('2025-07-20');
+  const baseBS = { year: 2082, month: 4, day: 4 }; // २०८२ साउन ४
+
+  const diffDays = Math.floor((adDate - known) / (1000 * 60 * 60 * 24));
+  let bsY = baseBS.year, bsM = baseBS.month, bsD = baseBS.day + diffDays;
+
+  const getMonthLength = (y, m) => {
+    const row = bsData.find(d => d[0] === y);
+    return row ? row[m] : 30;
+  };
+
+  while (bsD > getMonthLength(bsY, bsM)) {
+    bsD -= getMonthLength(bsY, bsM);
+    bsM++;
+    if (bsM > 12) {
+      bsM = 1;
+      bsY++;
+    }
+  }
+
+  while (bsD <= 0) {
+    bsM--;
+    if (bsM < 1) {
+      bsM = 12;
+      bsY--;
+    }
+    bsD += getMonthLength(bsY, bsM);
+  }
+
+  return { year: bsY, month: bsM, day: bsD };
+}
+
+function getNepaliDateTime() {
+  const now = new Date();
+  const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+  const nepalTime = new Date(utc + 5.75 * 3600000);
+  const bs = adToBs(nepalTime);
+  const bsDay = bsDayNames[nepalTime.getDay()];
+
+  let h = nepalTime.getHours(), m = nepalTime.getMinutes();
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  const timeStr = `${toNepaliDigits(h.toString())}:${toNepaliDigits(m.toString().padStart(2,'0'))} ${ampm}`;
+
+  const dateStr = `${toNepaliDigits(bs.year.toString())} ${bsMonthNames[bs.month - 1]} ${toNepaliDigits(bs.day.toString())}`;
+  return `${dateStr}, ${bsDay}, समय: ${timeStr}`;
+}
+
+function loadNepaliDateTime() {
+  const el = document.getElementById('nepaliDateTime');
+  el.textContent = getNepaliDateTime();
+}
+
+loadNepaliDateTime();
+setInterval(loadNepaliDateTime, 60000);
+</script>
+
 </body>
 </html>
+

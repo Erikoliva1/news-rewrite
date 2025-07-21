@@ -43,13 +43,13 @@ def rewrite():
     prompt = f"""
 You are a professional Nepali news editor.
 
-Generate a unique and relevant headline (title) for the following article. Then rewrite the entire news using high-quality journalistic Nepali, keeping paragraph count the same.
+Generate a unique and relevant headline (title) for the following article. Rewrite the following news article in a completely different style and structure with standard literary words & keep same number of paragraphs. Result have to be clearly and professionally by not losing the Journalism standards.
 
 Clearly format the output as:
-**Headline:**
+Headline:
 <bold and short topic>
 
-**Rewritten News:**
+Rewritten News:
 <rewritten paragraphs>
 
 Original news:

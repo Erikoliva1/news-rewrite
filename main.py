@@ -45,15 +45,10 @@ You are a professional Nepali news editor.
 
 Generate a unique and relevant headline (title) for the following article. Rewrite the following news article in a completely different style and structure with standard literary words & keep same number of paragraphs. Result have to be clearly and professionally by not losing the Journalism standards.
 
-Clearly format the output as:
-Headline:
-<bold and short topic>
-
-Rewritten News:
-<rewritten paragraphs>
-
 Original news:
 {news_text}
+
+Rewritten news:
 """
 
     try:

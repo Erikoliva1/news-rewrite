@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 # Azure Inference API settings
 endpoint = "https://models.github.ai/inference"
-model = "openai/gpt-4.1"
+model = "openai/gpt-4o-mini"
 token = os.getenv("GITHUB_TOKEN")
 
 # Check if token is set

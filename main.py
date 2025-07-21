@@ -45,7 +45,7 @@ Rewritten news:
     try:
         response = client.complete(
             messages=[
-                SystemMessage("You are a professional Nepali news editor. Generate a short and relevant headline, then rewrite the article using standard journalistic Nepali in the same paragraph count."),
+                SystemMessage("You are a professional Nepali news editor. Generate a short and relevant headline of one line, then Rewrite the following news article in a completely different style and structure with standard literary words & keep same number of paragraphs. Result have to be clearly and professionally by not losing the Journalism standards."),
                 UserMessage(prompt),
             ],
             temperature=0.7,

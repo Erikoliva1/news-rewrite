@@ -60,10 +60,9 @@ Rewritten news:
             top_p=1,
             model=model
         )
-
-        # Clean spacing: remove multiple newlines
-        rewritten_raw = response.choices[0].message.content.strip()
-        rewritten_clean = '\n'.join([para.strip() for para in rewritten_raw.split('\n') if para.strip()])
+# Clean spacing: remove multiple newlines
+rewritten_raw = response.choices[0].message.content.strip()
+rewritten_clean = '\n'.join([para.strip() for para in rewritten_raw.split('\n') if para.strip()])
         return jsonify({"rewritten_news": rewritten})
 
     except Exception as e:

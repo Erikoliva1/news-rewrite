@@ -1,4 +1,3 @@
-
 from flask import Flask, request, render_template, jsonify
 from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import SystemMessage, UserMessage
@@ -9,7 +8,7 @@ import os
 load_dotenv()
 
 app = Flask(__name__)
-
+    
 # Azure Inference API settings
 endpoint = "https://models.github.ai/inference"
 model = "openai/gpt-4.1"
@@ -37,23 +36,18 @@ def rewrite():
 
     original_news = data.get("news", "").strip()
 
-    # Insert paragraph markers
+    # Insert [PARAGRAPH_BREAK] markers
     news_text = original_news.replace("\n\n", "\n\n[PARAGRAPH_BREAK]\n\n")
 
     prompt = f"""
 You are a professional Nepali news editor.
 
-Generate a unique and relevant headline (title) for the following article. Then rewrite the entire news using high-quality journalistic Nepali, keeping paragraph count the same.
-
-Clearly format the output as:
-**Headline:**
-<bold and short topic>
-
-**Rewritten News:**
-<rewritten paragraphs>
+Rewrite the following news article in a completely different style and structure with standard literary words & keep same number of paragraphs. Result have to be clearly and professionally by not losing the Journalism standards.
 
 Original news:
 {news_text}
+
+Rewritten news:
 """
 
     try:
@@ -67,11 +61,8 @@ Original news:
             model=model
         )
 
-        # Clean paragraph spacing
-        raw_output = response.choices[0].message.content.strip()
-        clean_output = '\n'.join([para.strip() for para in raw_output.split('\n') if para.strip()])
-
-        return jsonify({"rewritten_news": clean_output})
+        rewritten = response.choices[0].message.content.strip()
+        return jsonify({"rewritten_news": rewritten})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500

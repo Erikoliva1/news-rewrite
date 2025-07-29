@@ -351,41 +351,4 @@ function getNepaliDateTime() {
   const now = new Date();
   const utc = now.getTime() + now.getTimezoneOffset() * 60000;
   const nepalTime = new Date(utc + 5.75 * 3600000);
-  const bs = adToBs(nepalTime);
-  const bsDay = bsDayNames[nepalTime.getDay()];
-
-  let h = nepalTime.getHours(), m = nepalTime.getMinutes();
-  const ampm = h >= 12 ? 'PM' : 'AM';
-  h = h % 12 || 12;
-  const timeStr = `${toNepaliDigits(h.toString())}:${toNepaliDigits(m.toString().padStart(2,'0'))} ${ampm}`;
-
-  const dateStr = `${toNepaliDigits(bs.year.toString())} ${bsMonthNames[bs.month - 1]} ${toNepaliDigits(bs.day.toString())}`;
-  return `${dateStr}, ${bsDay}, समय: ${timeStr}`;
-}
-
-function loadNepaliDateTime() {
-  const el = document.getElementById('nepaliDateTime');
-  el.textContent = getNepaliDateTime();
-}
-
-loadNepaliDateTime();
-setInterval(loadNepaliDateTime, 60000);
-</script>
-
-<!-- Existing scripts above this line -->
-
-<!-- Buy Me a Coffee Widget -->
-<script data-name="BMC-Widget" 
-        data-cfasync="false" 
-        src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" 
-        data-id="prabhatyadav" 
-        data-description="Support me on Buy me a coffee!" 
-        data-message="If you like my job please buy me a coffee." 
-        data-color="#5F7FFF" 
-        data-position="Right" 
-        data-x_margin="18" 
-        data-y_margin="18">
-</script>
-
-</body>
-</html>
+  const bs = adToBs(nepal

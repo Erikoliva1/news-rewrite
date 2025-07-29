@@ -5,9 +5,15 @@ from azure.core.credentials import AzureKeyCredential
 from dotenv import load_dotenv
 import os
 import traceback
+import logging
 
+# Load environment variables from .env file
 load_dotenv()
+
 app = Flask(__name__)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
 
 # Azure Inference API settings
 endpoint = "https://models.github.ai/inference"
@@ -45,7 +51,7 @@ Rewritten news:
     try:
         response = client.complete(
             messages=[
-                SystemMessage("You are a professional Nepali news editor. Generate a short and relevant headline, then rewrite the article using standard journalistic Nepali in the same paragraph count."),
+                SystemMessage("You are a professional Nepali news editor. Generate a short and relevant headline, then rewrite the article in totally new style and structure by not losing originality using standard journalistic Nepali in the same paragraph count."),
                 UserMessage(prompt),
             ],
             temperature=0.7,
@@ -70,8 +76,9 @@ Rewritten news:
         return jsonify({"rewritten_news": raw_output})
 
     except Exception as e:
+        logging.error("Error processing request: %s", str(e))
         traceback.print_exc()
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": "An error occurred while processing your request."}), 500
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))

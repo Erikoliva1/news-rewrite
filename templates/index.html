@@ -5,11 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>The Rim Online</title>
   <link rel="icon" href="https://i.ibb.co/BKqH689b/logo.png" type="image/png" />
-  
-  <!-- Google AdSense Script -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9384759972494414"
-     crossorigin="anonymous"></script>
-  
   <style>
     body {
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -36,13 +31,13 @@
       font-weight: bold;
       font-size: 1.2rem;
       margin-top: -5px;
-      margin-bottom: 20px; /* Adjusted margin for spacing */
+      margin-bottom: 20px;
       letter-spacing: 1px;
     }
 
     .header-datetime {
       text-align: center;
-      margin-top: 20px; /* Adjusted margin for spacing */
+      margin-top: 20px;
       margin-bottom: 10px;
       font-size: 15px;
       color: #444;
@@ -141,7 +136,7 @@
 
       .rim-online-text {
         font-size: 1rem;
-        margin-bottom: 20px; /* Adjusted margin for spacing */
+        margin-bottom: 20px;
       }
 
       .header-datetime {
@@ -188,21 +183,35 @@
     <div class="rim-online-text">THE RIM ONLINE</div>
 
     <!-- Buy Me a Coffee Button -->
-    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" 
-            data-name="bmc-button" 
-            data-slug="prabhatyadav" 
-            data-color="#FFDD00" 
-            data-emoji=""  
-            data-font="Cookie" 
-            data-text="Buy me a coffee" 
-            data-outline-color="#000000" 
-            data-font-color="#000000" 
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js"
+            data-name="bmc-button"
+            data-slug="prabhatyadav"
+            data-color="#FFDD00"
+            data-emoji=""
+            data-font="Cookie"
+            data-text="Buy me a coffee"
+            data-outline-color="#000000"
+            data-font-color="#000000"
             data-coffee-color="#ffffff"></script>
 
     <div class="header-datetime" id="nepaliDateTime">लोड हुँदैछ...</div>
   </div>
 
   <textarea id="news" placeholder="Paste your news here..."></textarea>
+
+  <div>
+    <label for="api-select">Select API:</label>
+    <select id="api-select">
+      <option value="azure_gpt41">Azure GPT-4.1</option>
+      <option value="azure_gpt41_nano">Azure GPT-4.1 Nano</option>
+      <option value="openrouter_gpt41_nano">OpenRouter GPT-4.1 Nano</option>
+      <option value="openrouter_deepseek">OpenRouter DeepSeek</option>
+      <option value="azure_gpt41_mini">Azure GPT-4.1 Mini</option>
+      <option value="azure_grok">Azure Grok</option>
+      <option value="openrouter_gpt35">OpenRouter GPT-3.5</option>
+      <option value="openrouter_gemma">OpenRouter Gemma</option>
+    </select>
+  </div>
 
   <div class="button-group">
     <button class="submit-btn" onclick="rewriteNews()">Submit</button>
@@ -224,6 +233,7 @@
   <script>
     async function rewriteNews() {
       const news = document.getElementById("news").value.trim();
+      const api = document.getElementById("api-select").value;
       const resultBox = document.getElementById("resultBox");
 
       if (!news) {
@@ -239,16 +249,24 @@
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({ news })
+          body: JSON.stringify({ news, api })
         });
 
-        const data = await response.json();
-
-        if (data.rewritten_news) {
-          const formattedNews = data.rewritten_news.replaceAll("[PARAGRAPH_BREAK]", "\n");
-          resultBox.innerHTML = `<strong>Result:</strong>\n\n${formattedNews}`;
+        if (response.ok) {
+          const data = await response.json();
+          if (data.rewritten_news) {
+            const formattedNews = data.rewritten_news.replace(/\[PARAGRAPH_BREAK\]/g, "\n");
+            resultBox.innerHTML = `<strong>Result:</strong>\n\n${formattedNews}`;
+          } else {
+            resultBox.innerHTML = `<span style='color:red;'>Error: ${data.error || 'Unknown error occurred'}</span>`;
+          }
         } else {
-          resultBox.innerHTML = `<span style='color:red;'>Error: ${data.error}</span>`;
+          const errorData = await response.json();
+          if (response.status === 429) {
+            resultBox.innerHTML = `<span style='color:orange;'><strong>Rate Limit:</strong> ${errorData.detail}</span>`;
+          } else {
+            resultBox.innerHTML = `<span style='color:red;'><strong>Error:</strong> ${errorData.detail || 'Unknown error occurred'}</span>`;
+          }
         }
       } catch (err) {
         console.error(err);

@@ -1,8 +1,7 @@
-flask
-python-dotenv
-azure-core
-azure-ai-inference
 fastapi
 uvicorn
-openai
 python-dotenv
+azure-ai-inference
+azure-core
+aiohttp
+pydantic

@@ -138,7 +138,7 @@ Rewritten news:
         "azure_gpt41_mini": ("azure", "openai/gpt-4.1-mini"),
         "azure_grok": ("azure", "xai/grok-3-mini"),
         "openrouter_gpt35": ("openrouter", "openai/gpt-3.5-turbo"),
-        "openrouter_gemma": ("openrouter", "google/gemma-3-27b-it:free")
+        "openrouter_gemma": ("openrouter", "google/gemma-3-27b-it:free"),
         "openrouter_claude3": ("openrouter", "anthropic/claude-3-haiku")
     }
 

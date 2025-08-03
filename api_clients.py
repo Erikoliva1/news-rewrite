@@ -139,6 +139,7 @@ Rewritten news:
         "azure_grok": ("azure", "xai/grok-3-mini"),
         "openrouter_gpt35": ("openrouter", "openai/gpt-3.5-turbo"),
         "openrouter_gemma": ("openrouter", "google/gemma-3-27b-it:free")
+        "openrouter_Claude3": ("openrouter", "anthropic/claude-3-haiku")
     }
 
     if selected_api not in api_mapping:

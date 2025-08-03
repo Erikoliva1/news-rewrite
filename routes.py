@@ -35,7 +35,7 @@ async def rewrite(request: NewsRequest):
                 "azure_grok": "Azure Grok",
                 "openrouter_gpt35": "OpenRouter GPT-3.5",
                 "openrouter_gemma": "OpenRouter Gemma"
-                "openrouter_claude3": "OpenRouter Claude3"
+                "openrouter_claude3": "OpenRouter Claude-3"
             }
             api_name = api_mapping.get(selected_api, selected_api)
             raise HTTPException(
@@ -54,7 +54,7 @@ async def rewrite(request: NewsRequest):
                 "azure_grok": "Azure Grok",
                 "openrouter_gpt35": "OpenRouter GPT-3.5",
                 "openrouter_gemma": "OpenRouter Gemma"
-                "openrouter_claude3": "OpenRouter Claude3"
+                "openrouter_claude3": "OpenRouter Claude-3"
             }
             api_name = api_mapping.get(selected_api, selected_api)
             raise HTTPException(
